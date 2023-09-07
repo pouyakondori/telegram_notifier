@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
+import axios from "axios";
 
 async function run() {
   try {
@@ -14,8 +15,7 @@ async function run() {
 
     // Send message to telegram
     const url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${message}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const { data } = await axios.get(url);
     console.log(data);
   } catch (error: any) {
     core.setFailed(error.message);
