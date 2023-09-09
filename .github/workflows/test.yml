@@ -9,6 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 16.x environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install npm dependencies 
+        run: |
+          npm install
+
+      - name: npm run build
+        run: |
+          npm run build
+
       - uses: ./
         with:
           telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -17,3 +33,20 @@ jobs:
             "Hello world"
             "This is a multiline message"
             "This is the last line"
+
+      - uses: ./
+        with:
+          telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          message: |
+            "Hello world"
+            "This is a multiline message"
+            "This is the last line"
+          imageUrl: "https://cdn.invicti.com/statics/img/drive/h2jfrvzrbyh1yff2n3wfu2hkqqps6x_uvqo.png"
+
+      - uses: ./
+        with:
+          telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          imageUrl: "https://cdn.invicti.com/statics/img/drive/h2jfrvzrbyh1yff2n3wfu2hkqqps6x_uvqo.png"
+

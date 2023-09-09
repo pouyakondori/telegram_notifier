@@ -10,7 +10,10 @@ inputs:
     required: true
   message:
     description: "Message to send"
-    required: true
+    required: false
+  imageUrl:
+    description: "Image to send"
+    required: false
 
 runs:
   using: "node16"
