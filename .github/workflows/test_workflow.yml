@@ -1,0 +1,59 @@
+name: "Notify on telegram"
+on:
+  workflow_call:
+    inputs:
+      message:
+        type: string
+        description: "Message to send"
+        required: false
+      imageUrl:
+        type: string
+        description: "Image url to send"
+        required: false
+    secrets:
+      telegram_bot_token:
+        description: "Telegram bot token"
+        required: true
+      telegram_chat_id:
+        description: "Telegram chat id"
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 16.x environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install npm dependencies
+        run: |
+          npm install
+
+      - name: npm run build
+        run: |
+          npm run build
+
+      - uses: ./
+        with:
+          telegram_bot_token: ${{ secrets.telegram_bot_token }}
+          telegram_chat_id: ${{ secrets.telegram_chat_id }}
+          message: ${{ inputs.message }}
+
+      - uses: ./
+        with:
+          telegram_bot_token: ${{ secrets.telegram_bot_token }}
+          telegram_chat_id: ${{ secrets.telegram_chat_id }}
+          message: ${{ inputs.message }}
+          imageUrl: ${{ inputs.imageUrl }}
+
+      - uses: ./
+        with:
+          telegram_bot_token: ${{ secrets.telegram_bot_token }}
+          telegram_chat_id: ${{ secrets.telegram_chat_id }}
+          imageUrl: ${{ inputs.imageUrl }}
