@@ -11951,27 +11951,123 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importDefault(__nccwpck_require__(8757));
-function run() {
+const fs = __importStar(__nccwpck_require__(7147));
+const path = __importStar(__nccwpck_require__(1017));
+const form_data_1 = __importDefault(__nccwpck_require__(4334));
+/**
+ * `downloadImage` downloads an image from a given URL and saves it with a specified file name.
+ * @param {string} imageUrl - The `imageUrl` parameter is a string that represents the URL of the image
+ * you want to download. It should be a valid URL pointing to an image file.
+ * @param {string} imageFileName - The `imageFileName` parameter is a string that represents the name
+ * of the file to be saved. It should include the file extension (e.g., "image.jpg").
+ */
+function downloadImage(imageUrl, imageFileName) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            // Get the JSON webhook payload for the event that triggered the workflow
-            const payload = JSON.stringify(github.context.payload, undefined, 2);
-            console.log(`The event payload: ${payload}`);
-            // Get the inputs from the workflow file:
-            const telegram_bot_token = core.getInput("telegram_bot_token");
-            const telegram_chat_id = core.getInput("telegram_chat_id");
-            const message = core.getInput("message");
-            // Send message to telegram
-            const url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${message}`;
-            const { data } = yield axios_1.default.get(url);
-            console.log(data);
+            const { data: image } = yield axios_1.default.get(imageUrl, {
+                responseType: "arraybuffer",
+            });
+            fs.writeFileSync(path.join(__dirname, imageFileName), image);
         }
         catch (error) {
             core.setFailed(error.message);
         }
     });
 }
-run();
+/**
+ * `sendImage` sends an image file to a Telegram chat using the Telegram Bot API.
+ * @param {string} imageFileName - The `imageFileName` parameter is a string that represents the name
+ * of the image file that you want to send. It should include the file extension (e.g., "image.jpg",
+ * "image.png", etc.).
+ * @param {string} telegram_bot_token - The `telegram_bot_token` is a unique token provided by the
+ * Telegram Bot API. It is used to authenticate and authorize your bot to access the Telegram API and
+ * perform actions on behalf of the bot.
+ * @param {string} telegram_chat_id - The `telegram_chat_id` parameter is the unique identifier for the
+ * chat or channel where you want to send the image. It can be a user's chat ID or a channel's ID.
+ */
+function sendImage(imageFileName, telegram_bot_token, telegram_chat_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const filePath = path.join(__dirname, imageFileName);
+            const readStream = fs.createReadStream(filePath);
+            const form = new form_data_1.default();
+            form.append("photo", readStream);
+            const url = `https://api.telegram.org/bot${telegram_bot_token}/sendPhoto?chat_id=${telegram_chat_id}`;
+            yield axios_1.default.post(url, form);
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
+}
+/**
+ * The function sends a message to a Telegram chat using the Telegram Bot API.
+ * @param {string} message - The message parameter is a string that represents the content of the
+ * message you want to send. It can be any text or information you want to communicate.
+ * @param {string} telegram_bot_token - The `telegram_bot_token` is a unique token that is provided by
+ * the Telegram Bot API. It is used to authenticate and authorize the bot to access the Telegram API
+ * and send messages on behalf of the bot.
+ * @param {string} telegram_chat_id - The `telegram_chat_id` parameter is the unique identifier for the
+ * Telegram chat or channel where you want to send the message. It can be a numeric ID for a chat or a
+ * username for a channel.
+ */
+function sendMessage(message, telegram_bot_token, telegram_chat_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${message}`;
+            yield axios_1.default.get(url);
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
+}
+/**
+ * The main function is an asynchronous function that handles sending messages and images to a Telegram
+ * chat using the Telegram Bot API.
+ */
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const imageFileName = `image${Date.now()}.jpg`;
+        try {
+            // Get the JSON webhook payload for the event that triggered the workflow
+            const payload = JSON.stringify(github.context.payload, undefined, 2);
+            console.log(`The event payload: ${payload}`);
+            // Get the inputs from the workflow file:
+            const telegram_bot_token = core.getInput("telegram_bot_token", {
+                required: true,
+            });
+            const telegram_chat_id = core.getInput("telegram_chat_id", {
+                required: true,
+            });
+            const message = core.getInput("message", { required: false });
+            const imageUrl = core.getInput("imageUrl", {
+                required: false,
+            });
+            if (imageUrl) {
+                console.log("Downloading image...");
+                yield downloadImage(imageUrl, imageFileName);
+                yield sendImage(imageFileName, telegram_bot_token, telegram_chat_id);
+                console.log("Image sent successfully!");
+            }
+            if (message) {
+                console.log("Sending message...");
+                yield sendMessage(message, telegram_bot_token, telegram_chat_id);
+                console.log("Message sent successfully!");
+            }
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+        finally {
+            // Delete the image (if exist) file from the runner after sending it to Telegram (whether the action was successful or not)
+            if (fs.existsSync(imageFileName)) {
+                fs.unlinkSync(imageFileName);
+            }
+        }
+    });
+}
+main();
 
 
 /***/ }),
