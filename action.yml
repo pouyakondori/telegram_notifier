@@ -1,6 +1,10 @@
 name: "Send Message On Telegram"
 description: "Send a message to a telegram chat"
 
+branding:
+  icon: "bell"
+  color: "blue"
+
 inputs:
   telegram_bot_token:
     description: "Telegram bot token"
