@@ -63,14 +63,27 @@ async function sendImage(
  * @param {string} telegram_chat_id - The `telegram_chat_id` parameter is the unique identifier for the
  * Telegram chat or channel where you want to send the message. It can be a numeric ID for a chat or a
  * username for a channel.
+ * @param telegram_topic_id - The `telegram_id` parameter is an optional attribute for cases that you want to send
+ * messages to a telegram super channel with different topics, and it should be a number.
  */
 async function sendMessage(
-  message: string,
-  telegram_bot_token: string,
-  telegram_chat_id: string
+    message: string,
+    telegram_bot_token: string,
+    telegram_chat_id: string,
+    telegram_topic_id?: string
 ) {
   try {
-    const url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${message}`;
+    // Base URL for sending messages
+    let url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${encodeURIComponent(
+        message
+    )}`;
+
+    // Add topic ID if provided
+    if (telegram_topic_id) {
+      url += `&message_thread_id=${telegram_topic_id}`;
+    }
+
+    // Send the request
     await axios.get(url);
   } catch (error: any) {
     core.setFailed(error.message);
@@ -96,6 +109,7 @@ async function main() {
     const telegram_chat_id = core.getInput("telegram_chat_id", {
       required: true,
     });
+    const telegram_topic_id = core.getInput("telegram_topic_id", { required: false });
     const message = core.getInput("message", { required: false });
     const imageUrl = core.getInput("imageUrl", {
       required: false,
@@ -109,7 +123,7 @@ async function main() {
     }
     if (message) {
       console.log("Sending message...");
-      await sendMessage(message, telegram_bot_token, telegram_chat_id);
+      await sendMessage(message, telegram_bot_token, telegram_chat_id, telegram_topic_id);
       console.log("Message sent successfully!");
     }
   } catch (error: any) {
