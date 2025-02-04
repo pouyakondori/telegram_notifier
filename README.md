@@ -28,7 +28,7 @@ A GitHub Action that enables you to send messages and images to Telegram chats, 
 |---------------------|----------|-----------------------------------------------------------------------------|
 | `telegram_bot_token` | Yes      | The unique token provided by the Telegram Bot API for authorization.       |
 | `telegram_chat_id`   | Yes      | The unique identifier for the Telegram chat or channel.                    |
-| `telegram_topic_id`  | No       | The unique identifier for the specific topic in supergroups or channels.   |
+| `telegram_topic_id`  | Yes       | The unique identifier for the specific topic in supergroups or channels.   |
 | `message`            | No       | The content of the message to send.                                        |
 | `imageUrl`           | No       | The URL of the image to download and send.                                 |
 
