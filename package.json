@@ -1,6 +1,6 @@
 {
   "name": "telegram_notifier_for_supergroups",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
