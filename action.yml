@@ -14,7 +14,7 @@ inputs:
     required: true
   telegram_topic_id:
     description: "The topic ID for a specific discussion in a channel"
-    required: false
+    required: true
   message:
     description: "Message to send"
     required: false

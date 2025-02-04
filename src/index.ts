@@ -70,7 +70,7 @@ async function sendMessage(
     message: string,
     telegram_bot_token: string,
     telegram_chat_id: string,
-    telegram_topic_id?: string
+    telegram_topic_id: string
 ) {
   try {
     // Base URL for sending messages
@@ -109,7 +109,7 @@ async function main() {
     const telegram_chat_id = core.getInput("telegram_chat_id", {
       required: true,
     });
-    const telegram_topic_id = core.getInput("telegram_topic_id", { required: false });
+    const telegram_topic_id = core.getInput("telegram_topic_id", { required: true });
     const message = core.getInput("message", { required: false });
     const imageUrl = core.getInput("imageUrl", {
       required: false,
