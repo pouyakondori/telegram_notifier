@@ -11993,6 +11993,7 @@ function sendImage(imageFileName, telegram_bot_token, telegram_chat_id) {
             const form = new form_data_1.default();
             form.append("photo", readStream);
             const url = `https://api.telegram.org/bot${telegram_bot_token}/sendPhoto?chat_id=${telegram_chat_id}`;
+            console.log(`This is the URL ${url}`);
             yield axios_1.default.post(url, form);
         }
         catch (error) {
@@ -12010,11 +12011,15 @@ function sendImage(imageFileName, telegram_bot_token, telegram_chat_id) {
  * @param {string} telegram_chat_id - The `telegram_chat_id` parameter is the unique identifier for the
  * Telegram chat or channel where you want to send the message. It can be a numeric ID for a chat or a
  * username for a channel.
+ * @param telegram_topic_id - The `telegram_id` parameter is an optional attribute for cases that you want to send
+ * messages to a telegram super channel with different topics, and it should be a number.
  */
-function sendMessage(message, telegram_bot_token, telegram_chat_id) {
+function sendMessage(message, telegram_bot_token, telegram_chat_id, telegram_topic_id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${message}`;
+            // Base URL for sending messages
+            let url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=Pull Request has been createddd&message_thread_id=${telegram_topic_id}`;
+            // Send the request
             yield axios_1.default.get(url);
         }
         catch (error) {
@@ -12040,6 +12045,7 @@ function main() {
             const telegram_chat_id = core.getInput("telegram_chat_id", {
                 required: true,
             });
+            const telegram_topic_id = core.getInput("telegram_topic_id", { required: true });
             const message = core.getInput("message", { required: false });
             const imageUrl = core.getInput("imageUrl", {
                 required: false,
@@ -12052,7 +12058,7 @@ function main() {
             }
             if (message) {
                 console.log("Sending message...");
-                yield sendMessage(message, telegram_bot_token, telegram_chat_id);
+                yield sendMessage(message, telegram_bot_token, telegram_chat_id, telegram_topic_id);
                 console.log("Message sent successfully!");
             }
         }
