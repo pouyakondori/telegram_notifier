@@ -1,9 +1,9 @@
-name: "Send Message On Telegram"
-description: "Send a message to a telegram chat"
+name: "Send Message On Telegram for Super Groups"
+description: "Send a message to a telegram chat and super groups"
 
 branding:
-  icon: "bell"
-  color: "blue"
+  icon: "check-circle"
+  color: "purple"
 
 inputs:
   telegram_bot_token:
