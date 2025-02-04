@@ -1,5 +1,5 @@
 {
-  "name": "telegram_notifier",
+  "name": "telegram_notifier_for_supergroups",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

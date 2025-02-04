@@ -17,6 +17,9 @@ on:
       telegram_chat_id:
         description: "Telegram chat id"
         required: true
+      telegram_topic_id:
+        description: "The topic ID for a specific discussion in a channel"
+        required: false
 
 jobs:
   test:
@@ -43,12 +46,14 @@ jobs:
         with:
           telegram_bot_token: ${{ secrets.telegram_bot_token }}
           telegram_chat_id: ${{ secrets.telegram_chat_id }}
+          telegram_topic_id: ${{ secrets.telegram_topic_id }}
           message: ${{ inputs.message }}
 
       - uses: ./
         with:
           telegram_bot_token: ${{ secrets.telegram_bot_token }}
           telegram_chat_id: ${{ secrets.telegram_chat_id }}
+          telegram_topic_id: ${{ secrets.telegram_topic_id }}
           message: ${{ inputs.message }}
           imageUrl: ${{ inputs.imageUrl }}
 
@@ -56,4 +61,5 @@ jobs:
         with:
           telegram_bot_token: ${{ secrets.telegram_bot_token }}
           telegram_chat_id: ${{ secrets.telegram_chat_id }}
+          telegram_topic_id: ${{ secrets.telegram_topic_id }}
           imageUrl: ${{ inputs.imageUrl }}
