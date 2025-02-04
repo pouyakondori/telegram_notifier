@@ -75,7 +75,7 @@ async function sendMessage(
 ) {
   try {
     // Base URL for sending messages
-    let url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=Pull Request has been createddd&message_thread_id=${telegram_topic_id}`;
+    let url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${message}&message_thread_id=${telegram_topic_id}`;
 
     // Send the request
     await axios.get(url);
