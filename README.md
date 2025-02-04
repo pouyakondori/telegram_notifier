@@ -1,4 +1,4 @@
-# Telegram Notifier
+# Telegram Notifier for SuperGroups
 
 A GitHub Action that enables you to send messages and images to Telegram chats, channels, or specific topics in supergroups using the Telegram Bot API.
 
