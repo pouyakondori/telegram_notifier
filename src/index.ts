@@ -76,12 +76,7 @@ async function sendMessage(
     // Base URL for sending messages
     let url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${encodeURIComponent(
         message
-    )}`;
-
-    // Add topic ID if provided
-    if (telegram_topic_id) {
-      url += `&message_thread_id=${telegram_topic_id}`;
-    }
+    )}&message_thread_id=${telegram_topic_id}`;
 
     // Send the request
     await axios.get(url);
