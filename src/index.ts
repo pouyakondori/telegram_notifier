@@ -47,6 +47,7 @@ async function sendImage(
     form.append("photo", readStream);
 
     const url = `https://api.telegram.org/bot${telegram_bot_token}/sendPhoto?chat_id=${telegram_chat_id}`;
+    console.log(`This is the URL ${url}`)
     await axios.post(url, form);
   } catch (error: any) {
     core.setFailed(error.message);
