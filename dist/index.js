@@ -12018,7 +12018,7 @@ function sendMessage(message, telegram_bot_token, telegram_chat_id, telegram_top
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // Base URL for sending messages
-            let url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&text=${message}&message_thread_id=${telegram_topic_id}`;
+            let url = `https://api.telegram.org/bot${telegram_bot_token}/sendMessage?chat_id=${telegram_chat_id}&message_thread_id=${telegram_topic_id}&text=${encodeURIComponent(message)}`;
             // Send the request
             yield axios_1.default.get(url);
         }
